@@ -33,7 +33,7 @@ export default function LoginPage() {
 
         if (response.ok) {
           // User is already authenticated, redirect to main page
-          router.push("/");
+          window.location.href = "/";
         } else {
           // Clear invalid session token
           localStorage.removeItem("sessionToken");
@@ -92,7 +92,8 @@ export default function LoginPage() {
 
         // Redirect to main page after a short delay
         setTimeout(() => {
-          router.push("/");
+          // Use window.location.href for better Safari compatibility
+          window.location.href = "/";
         }, 1500);
       } else {
         setError(data.error || "Error al iniciar sesión");
