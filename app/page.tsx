@@ -140,9 +140,9 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="p-4 max-w-4xl mx-auto">
+        <div className="p-4 max-w-4xl mx-auto h-screen flex flex-col">
           {/* Summary Cards */}
-          <div className="mb-6">
+          <div className="mb-6 flex-shrink-0">
             {/* Current Balance */}
             <div className="bg-zinc-900 border border-[#D4B886] rounded-xl p-4 md:p-6">
               <div className="flex justify-between items-start">
@@ -171,7 +171,7 @@ export default function Home() {
           </div>
 
           {/* Filter Buttons */}
-          <div className="flex gap-2 mb-6 overflow-x-auto pb-2 md:gap-4 md:overflow-visible">
+          <div className="flex gap-2 mb-6 overflow-x-auto pb-2 md:gap-4 md:overflow-visible flex-shrink-0">
             <button
               onClick={() => setActiveFilter("all")}
               className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors md:px-6 md:py-3 md:text-base ${
@@ -206,8 +206,8 @@ export default function Home() {
           </div>
 
           {/* Transaction History */}
-          <div className="bg-zinc-900 border border-[#D4B886] rounded-xl">
-            <div className="p-4 border-b border-[#D4B886] md:p-6">
+          <div className="bg-zinc-900 border border-[#D4B886] rounded-xl flex flex-col flex-1 min-h-0">
+            <div className="p-4 border-b border-[#D4B886] md:p-6 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 md:gap-3">
                   <div className="w-5 h-5 bg-[#D4B886] rounded flex items-center justify-center md:w-6 md:h-6">
@@ -235,7 +235,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="max-h-96 overflow-y-auto md:max-h-[600px]">
+            <div className="flex-1 overflow-y-auto">
               {filteredTransactions.length === 0 ? (
                 <div className="p-6 text-center">
                   <p className="text-gray-400 text-sm md:text-base">
