@@ -55,10 +55,25 @@ export default function LoginPage() {
     setSuccess("");
 
     try {
-      // Add +57 prefix if not present
-      const formattedPhone = phoneNumber.startsWith("+57")
-        ? phoneNumber
-        : `+57${phoneNumber}`;
+      // Validate phone number format
+      let formattedPhone = phoneNumber;
+
+      // Remove any non-digit characters except +
+      const cleanNumber = phoneNumber.replace(/[^\d+]/g, "");
+
+      // If it doesn't start with +57, add it
+      if (!cleanNumber.startsWith("+57")) {
+        formattedPhone = `+57${cleanNumber}`;
+      } else {
+        formattedPhone = cleanNumber;
+      }
+
+      // Validate the final format
+      if (formattedPhone.length !== 13 || !formattedPhone.startsWith("+57")) {
+        setError("Formato inválido. Debe ser 10 dígitos (ej: 3101234567)");
+        setLoading(false);
+        return;
+      }
 
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -98,6 +113,16 @@ export default function LoginPage() {
     // Limit to reasonable length (10 digits + optional +57)
     if (cleanValue.length <= 13) {
       setPhoneNumber(cleanValue);
+    }
+  };
+
+  // Validate if button should be enabled
+  const isValidPhoneNumber = () => {
+    const cleanNumber = phoneNumber.replace(/[^\d+]/g, "");
+    if (cleanNumber.startsWith("+57")) {
+      return cleanNumber.length === 13;
+    } else {
+      return cleanNumber.length === 10;
     }
   };
 
@@ -173,7 +198,7 @@ export default function LoginPage() {
 
           <button
             onClick={handleLogin}
-            disabled={loading || phoneNumber.length < 10}
+            disabled={loading || !isValidPhoneNumber()}
             className="w-full bg-[#D4B886] text-black py-3 px-4 rounded-lg font-medium hover:bg-[#D4B886]/90 focus:ring-2 focus:ring-[#D4B886] focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm md:py-4 md:text-base"
           >
             {loading ? "Iniciando..." : "Iniciar Sesión"}
