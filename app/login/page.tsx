@@ -161,14 +161,14 @@ export default function LoginPage() {
                 id="phone"
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
-                placeholder="Ingresa tu número de teléfono"
+                placeholder="Ej: 3101234567"
                 className="w-full px-3 py-3 bg-zinc-800 border border-[#D4B886] rounded-lg focus:ring-2 focus:ring-[#D4B886] focus:border-[#D4B886] text-white placeholder-gray-400 text-sm md:px-4 md:py-4 md:text-base"
                 style={{ fontSize: "16px" }}
                 disabled={loading}
               />
             </div>
             <p className="text-xs text-gray-400 mt-1 md:text-sm">
-              Ingresa cualquier formato de número de teléfono
+              Solo el número de teléfono (sin código de país)
             </p>
           </div>
 

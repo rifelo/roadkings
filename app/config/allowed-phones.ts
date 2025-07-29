@@ -9,8 +9,15 @@ interface AllowedPhone {
 
 // Function to normalize phone number for comparison
 function normalizePhoneNumber(phoneNumber: string): string {
-  // Remove all non-digit characters and + symbol
-  return phoneNumber.replace(/[^\d+]/g, "");
+  // Remove all non-digit characters
+  const digitsOnly = phoneNumber.replace(/\D/g, "");
+
+  // If it starts with 57 (country code), remove it to get just the phone number
+  if (digitsOnly.startsWith("57") && digitsOnly.length > 10) {
+    return digitsOnly.substring(2);
+  }
+
+  return digitsOnly;
 }
 
 // Function to check if a phone number is allowed
