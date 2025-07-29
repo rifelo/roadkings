@@ -235,7 +235,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1">
               {filteredTransactions.length === 0 ? (
                 <div className="p-6 text-center">
                   <p className="text-gray-400 text-sm md:text-base">
