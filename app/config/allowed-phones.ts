@@ -3,6 +3,7 @@
 export const ALLOWED_PHONE_NUMBERS = [
   "+573001234567", // Example: Replace with actual allowed numbers
   "+573009876543", // Example: Replace with actual allowed numbers
+  "+573106059758",
   // Add more phone numbers as needed
 ];
 

@@ -39,6 +39,7 @@ export default function RootLayout({
           href="/apple-touch-icon.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
+        <title>Roadking | Club</title>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

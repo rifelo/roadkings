@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const twentyFourHours = 24 * 60 * 60 * 1000;
 
     if (sessionAge > twentyFourHours) {
-      global.authenticatedUsers.delete(sessionToken);
+      global.authenticatedUsers?.delete(sessionToken);
       return NextResponse.json({ error: "Session expired" }, { status: 401 });
     }
 
