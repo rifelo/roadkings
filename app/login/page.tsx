@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function LoginPage() {
-  const [phoneNumber, setPhoneNumber] = useState("+57 ");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -55,12 +55,17 @@ export default function LoginPage() {
     setSuccess("");
 
     try {
+      // Add +57 prefix if not present
+      const formattedPhone = phoneNumber.startsWith("+57")
+        ? phoneNumber
+        : `+57${phoneNumber}`;
+
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ phoneNumber: phoneNumber.replace(/\s/g, "") }),
+        body: JSON.stringify({ phoneNumber: formattedPhone }),
       });
 
       const data = await response.json();
@@ -85,16 +90,14 @@ export default function LoginPage() {
   };
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
+    const value = e.target.value;
 
-    // Ensure it starts with +57
-    if (!value.startsWith("+57")) {
-      value = "+57 " + value.replace(/^\+57\s*/, "");
-    }
+    // Allow only numbers and + symbol
+    const cleanValue = value.replace(/[^\d+]/g, "");
 
-    // Limit to 14 characters (+57 + space + 10 digits)
-    if (value.length <= 14) {
-      setPhoneNumber(value);
+    // Limit to reasonable length (10 digits + optional +57)
+    if (cleanValue.length <= 13) {
+      setPhoneNumber(cleanValue);
     }
   };
 
@@ -157,19 +160,20 @@ export default function LoginPage() {
                 id="phone"
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
-                placeholder="+57 XXXXXXXXX"
+                placeholder="Ej: 3101234567"
                 className="w-full px-3 py-3 bg-zinc-800 border border-[#D4B886] rounded-lg focus:ring-2 focus:ring-[#D4B886] focus:border-[#D4B886] text-white placeholder-gray-400 text-sm md:px-4 md:py-4 md:text-base"
+                style={{ fontSize: "16px" }}
                 disabled={loading}
               />
             </div>
             <p className="text-xs text-gray-400 mt-1 md:text-sm">
-              Formato: +57 XXXXXXXXX
+              Formato: 3101234567 o +573101234567
             </p>
           </div>
 
           <button
             onClick={handleLogin}
-            disabled={loading || phoneNumber.replace(/\s/g, "").length !== 13}
+            disabled={loading || phoneNumber.length < 10}
             className="w-full bg-[#D4B886] text-black py-3 px-4 rounded-lg font-medium hover:bg-[#D4B886]/90 focus:ring-2 focus:ring-[#D4B886] focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm md:py-4 md:text-base"
           >
             {loading ? "Iniciando..." : "Iniciar Sesión"}
