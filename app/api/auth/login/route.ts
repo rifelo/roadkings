@@ -28,20 +28,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create a simple session (in production, use proper session management)
-    const sessionToken =
+    // Create a simple auth token
+    const authToken =
       Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-    // Store authenticated user (in production, use a database)
-    global.authenticatedUsers = global.authenticatedUsers || new Map();
-    global.authenticatedUsers.set(sessionToken, {
-      phoneNumber,
-      authenticatedAt: Date.now(),
-    });
-
+    // Return success with auth token
     return NextResponse.json({
       success: true,
-      sessionToken,
+      phoneNumber: phoneNumber,
+      authToken: authToken,
       message: "Inicio de sesión exitoso",
     });
   } catch (error) {

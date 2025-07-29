@@ -13,38 +13,18 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const sessionToken = localStorage.getItem("sessionToken");
+    const checkAuth = () => {
+      const authToken = localStorage.getItem("authToken");
 
-      if (!sessionToken) {
+      if (!authToken) {
         setIsAuthenticated(false);
         setIsLoading(false);
         return;
       }
 
-      try {
-        const response = await fetch("/api/auth/check-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ sessionToken }),
-        });
-
-        if (response.ok) {
-          setIsAuthenticated(true);
-        } else {
-          // Clear invalid session token
-          localStorage.removeItem("sessionToken");
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Error checking session:", error);
-        localStorage.removeItem("sessionToken");
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
+      // Simple check - if auth token exists, user is authenticated
+      setIsAuthenticated(true);
+      setIsLoading(false);
     };
 
     checkAuth();

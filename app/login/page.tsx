@@ -14,34 +14,13 @@ export default function LoginPage() {
 
   // Check if user is already authenticated
   useEffect(() => {
-    const checkAuth = async () => {
-      const sessionToken = localStorage.getItem("sessionToken");
+    const checkAuth = () => {
+      const authToken = localStorage.getItem("authToken");
 
-      if (!sessionToken) {
-        setIsCheckingAuth(false);
-        return;
-      }
-
-      try {
-        const response = await fetch("/api/auth/check-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ sessionToken }),
-        });
-
-        if (response.ok) {
-          // User is already authenticated, redirect to main page
-          window.location.href = "/";
-        } else {
-          // Clear invalid session token
-          localStorage.removeItem("sessionToken");
-          setIsCheckingAuth(false);
-        }
-      } catch (error) {
-        console.error("Error checking session:", error);
-        localStorage.removeItem("sessionToken");
+      if (authToken) {
+        // User is already authenticated, redirect to main page
+        window.location.href = "/";
+      } else {
         setIsCheckingAuth(false);
       }
     };
@@ -73,8 +52,9 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Store session token in localStorage
-        localStorage.setItem("sessionToken", data.sessionToken);
+        // Store auth token in localStorage
+        localStorage.setItem("authToken", data.authToken);
+        localStorage.setItem("userPhone", data.phoneNumber);
         setSuccess("¡Inicio de sesión exitoso! Redirigiendo...");
 
         // Redirect to main page after a short delay

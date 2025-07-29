@@ -21,26 +21,12 @@ export default function Home() {
   >("all");
 
   useEffect(() => {
-    const sessionToken = localStorage.getItem("sessionToken");
-    if (sessionToken) {
-      // Get user info from session
-      fetch("/api/auth/check-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sessionToken }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            setUserPhone(data.phoneNumber);
-          }
-        })
-        .finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
+    // Get user phone from localStorage
+    const userPhoneFromStorage = localStorage.getItem("userPhone");
+    if (userPhoneFromStorage) {
+      setUserPhone(userPhoneFromStorage);
     }
+    setIsLoading(false);
   }, []);
 
   // Fetch transactions from API
@@ -61,7 +47,8 @@ export default function Home() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("sessionToken");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userPhone");
     window.location.href = "/login";
   };
 
