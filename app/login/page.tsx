@@ -102,9 +102,11 @@ export default function LoginPage() {
   if (isCheckingAuth) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4B886] mx-auto mb-4"></div>
-          <p className="text-[#D4B886]">Verificando autenticación...</p>
+        <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-6 text-center max-w-sm w-full md:max-w-md">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#D4B886] mx-auto mb-3 md:h-12 md:w-12 md:mb-4"></div>
+          <p className="text-[#D4B886] text-sm md:text-base">
+            Verificando autenticación...
+          </p>
         </div>
       </div>
     );
@@ -112,40 +114,40 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
+      <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-6 w-full max-w-sm md:max-w-md md:p-8">
+        <div className="text-center mb-6 md:mb-8">
           <Image
             src="/roadkings.png"
             alt="Logo RoadKings"
-            width={120}
-            height={120}
-            className="mx-auto mb-4"
+            width={80}
+            height={80}
+            className="mx-auto mb-4 md:w-24 md:h-24"
           />
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Bienvenido a RoadKings
+          <h1 className="text-2xl font-bold text-white mb-2 md:text-3xl">
+            Bienvenido
           </h1>
-          <p className="text-[#D4B886]">
-            Ingresa tu número de teléfono para continuar
+          <p className="text-[#D4B886] text-sm md:text-base">
+            Ingresa tu número de teléfono
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-red-900/20 border border-red-500 text-red-400 px-3 py-2 rounded-lg mb-4 text-sm md:px-4 md:py-3 md:text-base">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="bg-green-900/20 border border-green-500 text-green-400 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-green-900/20 border border-green-500 text-green-400 px-3 py-2 rounded-lg mb-4 text-sm md:px-4 md:py-3 md:text-base">
             {success}
           </div>
         )}
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
             <label
               htmlFor="phone"
-              className="block text-sm font-medium text-[#D4B886] mb-2"
+              className="block text-sm font-medium text-[#D4B886] mb-2 md:text-base"
             >
               Número de Teléfono
             </label>
@@ -156,21 +158,21 @@ export default function LoginPage() {
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
                 placeholder="+57 XXXXXXXXX"
-                className="w-full px-4 py-3 bg-zinc-800 border border-[#D4B886] rounded-lg focus:ring-2 focus:ring-[#D4B886] focus:border-[#D4B886] text-white placeholder-gray-400"
+                className="w-full px-3 py-3 bg-zinc-800 border border-[#D4B886] rounded-lg focus:ring-2 focus:ring-[#D4B886] focus:border-[#D4B886] text-white placeholder-gray-400 text-sm md:px-4 md:py-4 md:text-base"
                 disabled={loading}
               />
             </div>
-            <p className="text-sm text-gray-400 mt-1">
-              Formato: +57 XXXXXXXXX (10 dígitos después de +57)
+            <p className="text-xs text-gray-400 mt-1 md:text-sm">
+              Formato: +57 XXXXXXXXX
             </p>
           </div>
 
           <button
             onClick={handleLogin}
             disabled={loading || phoneNumber.replace(/\s/g, "").length !== 13}
-            className="w-full bg-[#D4B886] text-black py-3 px-4 rounded-lg font-medium hover:bg-[#D4B886]/90 focus:ring-2 focus:ring-[#D4B886] focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full bg-[#D4B886] text-black py-3 px-4 rounded-lg font-medium hover:bg-[#D4B886]/90 focus:ring-2 focus:ring-[#D4B886] focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm md:py-4 md:text-base"
           >
-            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            {loading ? "Iniciando..." : "Iniciar Sesión"}
           </button>
         </div>
       </div>

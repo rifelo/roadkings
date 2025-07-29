@@ -86,10 +86,10 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-8 text-center">
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-8 text-center max-w-sm w-full md:max-w-md">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4B886] mx-auto mb-4"></div>
-          <p className="text-[#D4B886]">Cargando...</p>
+          <p className="text-[#D4B886] text-sm md:text-base">Cargando...</p>
         </div>
       </div>
     );
@@ -99,30 +99,32 @@ export default function Home() {
     <ProtectedRoute>
       <div className="min-h-screen bg-black text-white">
         {/* Header */}
-        <header className="bg-stone-900 border-b border-[#D4B886] p-4">
-          <div className="flex justify-between items-center">
+        <header className="bg-stone-900 border-b border-[#D4B886] p-4 sticky top-0 z-10">
+          <div className="flex justify-between items-center max-w-4xl mx-auto">
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/roadkings.png"
-                  alt="RoadKings Logo"
-                  width={48}
-                  height={48}
-                  className="rounded-full border-2 border-[#D4B886]"
-                />
-                <div>
-                  <h1 className="text-xl font-bold text-white">ROADKINGS</h1>
-                  <p className="text-sm text-[#D4B886]">PORTAL FINANCIERO</p>
-                </div>
+              <Image
+                src="/roadkings.png"
+                alt="RoadKings Logo"
+                width={40}
+                height={40}
+                className="rounded-full border-2 border-[#D4B886] md:w-12 md:h-12"
+              />
+              <div>
+                <h1 className="text-lg font-bold text-white md:text-xl">
+                  ROADKINGS MC
+                </h1>
+                <p className="text-xs text-[#D4B886] md:text-sm">
+                  PORTAL FINANCIERO
+                </p>
               </div>
             </div>
             <button
               onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-1 transition-colors md:px-4 md:py-2 md:text-base"
             >
-              <span>Cerrar Sesión</span>
+              <span className="hidden sm:inline">Cerrar</span>
               <svg
-                className="w-4 h-4"
+                className="w-4 h-4 md:w-5 md:h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -138,26 +140,26 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="p-6">
+        <div className="p-4 max-w-4xl mx-auto">
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+          <div className="mb-6">
             {/* Current Balance */}
-            <div className="bg-zinc-900 border border-[#D4B886] rounded-lg p-6">
+            <div className="bg-zinc-900 border border-[#D4B886] rounded-xl p-4 md:p-6">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="text-[#D4B886] text-sm font-medium">
+                  <p className="text-[#D4B886] text-xs font-medium mb-1 md:text-sm">
                     SALDO ACTUAL
                   </p>
-                  <p className="text-[#D4B886] text-3xl font-bold">
+                  <p className="text-[#D4B886] text-2xl font-bold md:text-3xl">
                     $
                     {currentBalance.toLocaleString("es-CO", {
                       minimumFractionDigits: 2,
                     })}
                   </p>
                 </div>
-                <div className="w-8 h-8 bg-[#D4B886] rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-[#D4B886] rounded-lg flex items-center justify-center md:w-10 md:h-10">
                   <svg
-                    className="w-5 h-5 text-black"
+                    className="w-4 h-4 text-black md:w-5 md:h-5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -169,117 +171,128 @@ export default function Home() {
           </div>
 
           {/* Filter Buttons */}
-          <div className="flex gap-4 mb-6">
+          <div className="flex gap-2 mb-6 overflow-x-auto pb-2 md:gap-4 md:overflow-visible">
             <button
               onClick={() => setActiveFilter("all")}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors md:px-6 md:py-3 md:text-base ${
                 activeFilter === "all"
                   ? "bg-[#D4B886] text-black"
                   : "bg-zinc-900 border border-[#D4B886] text-[#D4B886] hover:bg-[#D4B886] hover:text-black"
               }`}
             >
-              Todas las Transacciones
+              Todas ({transactions.length})
             </button>
             <button
               onClick={() => setActiveFilter("income")}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors md:px-6 md:py-3 md:text-base ${
                 activeFilter === "income"
                   ? "bg-[#D4B886] text-black"
                   : "bg-zinc-900 border border-[#D4B886] text-[#D4B886] hover:bg-[#D4B886] hover:text-black"
               }`}
             >
-              Solo Ingresos
+              Ingresos ({transactions.filter((t) => t.type === "income").length}
+              )
             </button>
             <button
               onClick={() => setActiveFilter("expenses")}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors md:px-6 md:py-3 md:text-base ${
                 activeFilter === "expenses"
                   ? "bg-[#D4B886] text-black"
                   : "bg-zinc-900 border border-[#D4B886] text-[#D4B886] hover:bg-[#D4B886] hover:text-black"
               }`}
             >
-              Solo Gastos
+              Gastos ({transactions.filter((t) => t.type === "expense").length})
             </button>
           </div>
 
           {/* Transaction History */}
-          <div className="bg-zinc-900 border border-[#D4B886] rounded-lg">
-            <div className="p-6 border-b border-[#D4B886]">
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 bg-[#D4B886] rounded flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-black"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+          <div className="bg-zinc-900 border border-[#D4B886] rounded-xl">
+            <div className="p-4 border-b border-[#D4B886] md:p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-5 h-5 bg-[#D4B886] rounded flex items-center justify-center md:w-6 md:h-6">
+                    <svg
+                      className="w-3 h-3 text-black md:w-4 md:h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <h2 className="text-lg font-bold text-white md:text-xl">
+                    Transacciones
+                  </h2>
                 </div>
-                <h2 className="text-xl font-bold text-white">
-                  Historial de Transacciones
-                </h2>
+                <div className="text-right">
+                  <p className="text-[#D4B886] text-xs font-medium md:text-sm">
+                    Mostrando {filteredTransactions.length} de{" "}
+                    {transactions.length}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-zinc-800 border-b border-[#D4B886]">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-[#D4B886]">
-                      FECHA
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-[#D4B886]">
-                      DESCRIPCIÓN
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-[#D4B886]">
-                      MONTO
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#D4B886]">
+            <div className="max-h-96 overflow-y-auto md:max-h-[600px]">
+              {filteredTransactions.length === 0 ? (
+                <div className="p-6 text-center">
+                  <p className="text-gray-400 text-sm md:text-base">
+                    No hay transacciones
+                  </p>
+                </div>
+              ) : (
+                <div className="divide-y divide-[#D4B886]">
                   {filteredTransactions.map((transaction) => (
-                    <tr
+                    <div
                       key={transaction.id}
-                      className="hover:bg-zinc-800/50 transition-colors"
+                      className="p-4 hover:bg-zinc-800/50 transition-colors md:p-6"
                     >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <svg
-                            className="w-4 h-4 text-[#D4B886]"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span className="text-white">{transaction.date}</span>
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <svg
+                              className="w-3 h-3 text-[#D4B886] flex-shrink-0 md:w-4 md:h-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <span className="text-white text-xs md:text-sm">
+                              {transaction.date}
+                            </span>
+                          </div>
+                          <p className="text-white text-sm truncate md:text-base">
+                            {transaction.description}
+                          </p>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 text-white">
-                        {transaction.description}
-                      </td>
-                      <td
-                        className={`px-6 py-4 font-medium ${
-                          transaction.type === "income"
-                            ? "text-green-400"
-                            : "text-red-400"
-                        }`}
-                      >
-                        {transaction.type === "income" ? "+" : "-"}$
-                        {Math.abs(transaction.amount).toLocaleString("es-CO", {
-                          minimumFractionDigits: 2,
-                        })}
-                      </td>
-                    </tr>
+                        <div
+                          className={`ml-3 text-right ${
+                            transaction.type === "income"
+                              ? "text-green-400"
+                              : "text-red-400"
+                          }`}
+                        >
+                          <p className="text-sm font-medium md:text-base">
+                            {transaction.type === "income" ? "+" : "-"}$
+                            {Math.abs(transaction.amount).toLocaleString(
+                              "es-CO",
+                              {
+                                minimumFractionDigits: 2,
+                              }
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              )}
             </div>
           </div>
         </div>
