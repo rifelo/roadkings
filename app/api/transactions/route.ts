@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: "Failed to read transactions",
+        error: "Error al leer transacciones",
         transactions: [],
       },
       { status: 500 }

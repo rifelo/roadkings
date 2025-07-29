@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function LoginPage() {
-  const [phoneNumber, setPhoneNumber] = useState("+57");
+  const [phoneNumber, setPhoneNumber] = useState("+57 ");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -60,7 +60,7 @@ export default function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ phoneNumber }),
+        body: JSON.stringify({ phoneNumber: phoneNumber.replace(/\s/g, "") }),
       });
 
       const data = await response.json();
@@ -68,17 +68,17 @@ export default function LoginPage() {
       if (response.ok) {
         // Store session token in localStorage
         localStorage.setItem("sessionToken", data.sessionToken);
-        setSuccess("Login successful! Redirecting...");
+        setSuccess("¡Inicio de sesión exitoso! Redirigiendo...");
 
         // Redirect to main page after a short delay
         setTimeout(() => {
           router.push("/");
         }, 1500);
       } else {
-        setError(data.error || "Failed to login");
+        setError(data.error || "Error al iniciar sesión");
       }
     } catch (error) {
-      setError("Network error. Please try again.");
+      setError("Error de red. Por favor inténtalo de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -89,11 +89,11 @@ export default function LoginPage() {
 
     // Ensure it starts with +57
     if (!value.startsWith("+57")) {
-      value = "+57" + value.replace(/^\+57/, "");
+      value = "+57 " + value.replace(/^\+57\s*/, "");
     }
 
-    // Limit to 13 characters (+57 + 10 digits)
-    if (value.length <= 13) {
+    // Limit to 14 characters (+57 + space + 10 digits)
+    if (value.length <= 14) {
       setPhoneNumber(value);
     }
   };
@@ -101,40 +101,42 @@ export default function LoginPage() {
   // Show loading while checking authentication
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking authentication...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4B886] mx-auto mb-4"></div>
+          <p className="text-[#D4B886]">Verificando autenticación...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <Image
             src="/roadkings.png"
-            alt="RoadKings Logo"
+            alt="Logo RoadKings"
             width={120}
             height={120}
             className="mx-auto mb-4"
           />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome to RoadKings
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Bienvenido a RoadKings
           </h1>
-          <p className="text-gray-600">Enter your phone number to continue</p>
+          <p className="text-[#D4B886]">
+            Ingresa tu número de teléfono para continuar
+          </p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-green-900/20 border border-green-500 text-green-400 px-4 py-3 rounded-lg mb-4">
             {success}
           </div>
         )}
@@ -143,9 +145,9 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="phone"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[#D4B886] mb-2"
             >
-              Phone Number
+              Número de Teléfono
             </label>
             <div className="relative">
               <input
@@ -153,22 +155,22 @@ export default function LoginPage() {
                 id="phone"
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
-                placeholder="+57XXXXXXXXX"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="+57 XXXXXXXXX"
+                className="w-full px-4 py-3 bg-zinc-800 border border-[#D4B886] rounded-lg focus:ring-2 focus:ring-[#D4B886] focus:border-[#D4B886] text-white placeholder-gray-400"
                 disabled={loading}
               />
             </div>
-            <p className="text-sm text-gray-500 mt-1">
-              Format: +57XXXXXXXXX (10 digits after +57)
+            <p className="text-sm text-gray-400 mt-1">
+              Formato: +57 XXXXXXXXX (10 dígitos después de +57)
             </p>
           </div>
 
           <button
             onClick={handleLogin}
-            disabled={loading || phoneNumber.length !== 13}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            disabled={loading || phoneNumber.replace(/\s/g, "").length !== 13}
+            className="w-full bg-[#D4B886] text-black py-3 px-4 rounded-lg font-medium hover:bg-[#D4B886]/90 focus:ring-2 focus:ring-[#D4B886] focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>
         </div>
       </div>

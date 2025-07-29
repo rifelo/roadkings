@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
 
     if (!sessionToken) {
       return NextResponse.json(
-        { error: "Session token is required" },
+        { error: "Se requiere token de sesión" },
         { status: 400 }
       );
     }
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const userData = global.authenticatedUsers?.get(sessionToken);
 
     if (!userData) {
-      return NextResponse.json({ error: "Invalid session" }, { status: 401 });
+      return NextResponse.json({ error: "Sesión inválida" }, { status: 401 });
     }
 
     // Check if session has expired (24 hours)
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     if (sessionAge > twentyFourHours) {
       global.authenticatedUsers?.delete(sessionToken);
-      return NextResponse.json({ error: "Session expired" }, { status: 401 });
+      return NextResponse.json({ error: "Sesión expirada" }, { status: 401 });
     }
 
     return NextResponse.json({
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error checking session:", error);
     return NextResponse.json(
-      { error: "Failed to check session" },
+      { error: "Error al verificar sesión" },
       { status: 500 }
     );
   }

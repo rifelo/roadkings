@@ -12,17 +12,21 @@ export async function POST(request: NextRequest) {
       phoneNumber.length !== 13
     ) {
       return NextResponse.json(
-        { error: "Invalid phone number format. Must be +57XXXXXXXXX" },
+        {
+          error:
+            "Formato de número de teléfono inválido. Debe ser +57XXXXXXXXX",
+        },
         { status: 400 }
       );
     }
 
     // Check if phone number is in the allowed list
-    if (!isPhoneNumberAllowed(phoneNumber)) {
+    const isAllowed = await isPhoneNumberAllowed(phoneNumber);
+    if (!isAllowed) {
       return NextResponse.json(
         {
           error:
-            "Access denied. This phone number is not authorized to use this application.",
+            "Acceso denegado. Este número de teléfono no está autorizado para usar esta aplicación.",
         },
         { status: 403 }
       );
@@ -42,10 +46,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       sessionToken,
-      message: "Login successful",
+      message: "Inicio de sesión exitoso",
     });
   } catch (error) {
     console.error("Error during login:", error);
-    return NextResponse.json({ error: "Failed to login" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error al iniciar sesión" },
+      { status: 500 }
+    );
   }
 }

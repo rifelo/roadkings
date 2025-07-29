@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Image from "next/image";
 
 interface Transaction {
   id: string;
@@ -85,10 +86,10 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
-          <p className="text-gray-300">Loading...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="bg-zinc-900 border border-[#D4B886] rounded-2xl shadow-xl p-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4B886] mx-auto mb-4"></div>
+          <p className="text-[#D4B886]">Cargando...</p>
         </div>
       </div>
     );
@@ -96,46 +97,30 @@ export default function Home() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-900 text-white">
+      <div className="min-h-screen bg-black text-white">
         {/* Header */}
-        <header className="bg-gray-800 border-b border-gray-700 p-4">
+        <header className="bg-stone-900 border-b border-[#D4B886] p-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-gray-900"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-                  </svg>
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/roadkings.png"
+                  alt="RoadKings Logo"
+                  width={48}
+                  height={48}
+                  className="rounded-full border-2 border-[#D4B886]"
+                />
+                <div>
+                  <h1 className="text-xl font-bold text-white">ROADKINGS</h1>
+                  <p className="text-sm text-[#D4B886]">PORTAL FINANCIERO</p>
                 </div>
-                <div className="w-6 h-6 bg-yellow-500 rounded-sm flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-gray-900"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-white">ROADKINGS MC</h1>
-                <p className="text-sm text-gray-400">FINANCE PORTAL</p>
               </div>
             </div>
             <button
               onClick={handleLogout}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
             >
-              <span>Logout</span>
+              <span>Cerrar Sesión</span>
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -157,22 +142,22 @@ export default function Home() {
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
             {/* Current Balance */}
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <div className="bg-zinc-900 border border-[#D4B886] rounded-lg p-6">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="text-gray-400 text-sm font-medium">
-                    CURRENT BALANCE
+                  <p className="text-[#D4B886] text-sm font-medium">
+                    SALDO ACTUAL
                   </p>
-                  <p className="text-yellow-500 text-3xl font-bold">
+                  <p className="text-[#D4B886] text-3xl font-bold">
                     $
-                    {currentBalance.toLocaleString("en-US", {
+                    {currentBalance.toLocaleString("es-CO", {
                       minimumFractionDigits: 2,
                     })}
                   </p>
                 </div>
-                <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-[#D4B886] rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-5 h-5 text-gray-900"
+                    className="w-5 h-5 text-black"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -189,41 +174,41 @@ export default function Home() {
               onClick={() => setActiveFilter("all")}
               className={`px-6 py-3 rounded-lg font-medium transition-colors ${
                 activeFilter === "all"
-                  ? "bg-yellow-500 text-gray-900"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-[#D4B886] text-black"
+                  : "bg-zinc-900 border border-[#D4B886] text-[#D4B886] hover:bg-[#D4B886] hover:text-black"
               }`}
             >
-              All Transactions
+              Todas las Transacciones
             </button>
             <button
               onClick={() => setActiveFilter("income")}
               className={`px-6 py-3 rounded-lg font-medium transition-colors ${
                 activeFilter === "income"
-                  ? "bg-yellow-500 text-gray-900"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-[#D4B886] text-black"
+                  : "bg-zinc-900 border border-[#D4B886] text-[#D4B886] hover:bg-[#D4B886] hover:text-black"
               }`}
             >
-              Income Only
+              Solo Ingresos
             </button>
             <button
               onClick={() => setActiveFilter("expenses")}
               className={`px-6 py-3 rounded-lg font-medium transition-colors ${
                 activeFilter === "expenses"
-                  ? "bg-yellow-500 text-gray-900"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-[#D4B886] text-black"
+                  : "bg-zinc-900 border border-[#D4B886] text-[#D4B886] hover:bg-[#D4B886] hover:text-black"
               }`}
             >
-              Expenses Only
+              Solo Gastos
             </button>
           </div>
 
           {/* Transaction History */}
-          <div className="bg-gray-800 rounded-lg border border-gray-700">
-            <div className="p-6 border-b border-gray-700">
+          <div className="bg-zinc-900 border border-[#D4B886] rounded-lg">
+            <div className="p-6 border-b border-[#D4B886]">
               <div className="flex items-center gap-3">
-                <div className="w-6 h-6 bg-yellow-500 rounded flex items-center justify-center">
+                <div className="w-6 h-6 bg-[#D4B886] rounded flex items-center justify-center">
                   <svg
-                    className="w-4 h-4 text-gray-900"
+                    className="w-4 h-4 text-black"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -234,34 +219,36 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h2 className="text-xl font-bold">Transaction History</h2>
+                <h2 className="text-xl font-bold text-white">
+                  Historial de Transacciones
+                </h2>
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-700">
+                <thead className="bg-zinc-800 border-b border-[#D4B886]">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
-                      DATE
+                    <th className="px-6 py-4 text-left text-sm font-medium text-[#D4B886]">
+                      FECHA
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
-                      DESCRIPTION
+                    <th className="px-6 py-4 text-left text-sm font-medium text-[#D4B886]">
+                      DESCRIPCIÓN
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
-                      AMOUNT
+                    <th className="px-6 py-4 text-left text-sm font-medium text-[#D4B886]">
+                      MONTO
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-[#D4B886]">
                   {filteredTransactions.map((transaction) => (
                     <tr
                       key={transaction.id}
-                      className="hover:bg-gray-700 transition-colors"
+                      className="hover:bg-zinc-800/50 transition-colors"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <svg
-                            className="w-4 h-4 text-gray-400"
+                            className="w-4 h-4 text-[#D4B886]"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -271,23 +258,21 @@ export default function Home() {
                               clipRule="evenodd"
                             />
                           </svg>
-                          <span className="text-gray-300">
-                            {transaction.date}
-                          </span>
+                          <span className="text-white">{transaction.date}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4 text-white">
                         {transaction.description}
                       </td>
                       <td
                         className={`px-6 py-4 font-medium ${
                           transaction.type === "income"
-                            ? "text-green-500"
-                            : "text-red-500"
+                            ? "text-green-400"
+                            : "text-red-400"
                         }`}
                       >
                         {transaction.type === "income" ? "+" : "-"}$
-                        {Math.abs(transaction.amount).toLocaleString("en-US", {
+                        {Math.abs(transaction.amount).toLocaleString("es-CO", {
                           minimumFractionDigits: 2,
                         })}
                       </td>

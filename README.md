@@ -11,7 +11,7 @@ A Next.js application with phone number whitelist authentication for authorized 
 - ⚡ Instant login for authorized users
 - 📋 Whitelist-based access control
 - 💰 Finance portal with transaction tracking
-- 📊 CSV-based transaction data management
+- 📊 CSV-based data management
 
 ## Setup Instructions
 
@@ -23,19 +23,24 @@ pnpm install
 
 ### 2. Configure Allowed Phone Numbers
 
-Edit `app/config/allowed-phones.ts` and add the phone numbers you want to grant access to:
+Edit `data/allowed-phones.csv` to manage authorized users:
 
-```typescript
-export const ALLOWED_PHONE_NUMBERS = [
-  "+573001234567", // Replace with actual allowed numbers
-  "+573009876543", // Replace with actual allowed numbers
-  // Add more phone numbers as needed
-];
+```csv
+phone_number,name,status
++573001234567,John Doe,active
++573009876543,Jane Smith,active
++573001112223,Bob Johnson,active
++573004445556,Alice Brown,active
 ```
+
+**CSV Format:**
+- `phone_number`: Colombian phone number (+57XXXXXXXXX)
+- `name`: User's name for reference
+- `status`: "active" for allowed users, "inactive" to disable access
 
 ### 3. Configure Transaction Data
 
-Edit `data/transactions.csv` to manage your transaction data. The CSV should have the following format:
+Edit `data/transactions.csv` to manage your transaction data:
 
 ```csv
 date,description,amount,type
@@ -73,6 +78,7 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 - `POST /api/auth/login`: Authenticate user with phone number
 - `POST /api/auth/check-session`: Check if user session is valid
 - `GET /api/transactions`: Get transaction data from CSV file
+- `GET /api/auth/allowed-phones`: Get allowed phone numbers from CSV file
 
 ## Security Features
 
@@ -88,7 +94,8 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 app/
 ├── api/auth/
 │   ├── login/route.ts           # Phone number authentication
-│   └── check-session/route.ts   # Check session
+│   ├── check-session/route.ts   # Check session
+│   └── allowed-phones/route.ts  # Allowed phones API
 ├── api/
 │   └── transactions/route.ts     # Transaction data API
 ├── components/
@@ -99,20 +106,25 @@ app/
 │   └── page.tsx                 # Login page
 ├── page.tsx                     # Protected main page
 └── data/
+    ├── allowed-phones.csv       # Allowed phone numbers
     └── transactions.csv          # Transaction data file
 ```
 
-## Adding New Users
+## Managing Users
 
-To grant access to new users, simply add their phone numbers to the `ALLOWED_PHONE_NUMBERS` array in `app/config/allowed-phones.ts`:
+To add or modify authorized users, edit the `data/allowed-phones.csv` file:
 
-```typescript
-export const ALLOWED_PHONE_NUMBERS = [
-  "+573001234567", // Existing user
-  "+573009876543", // Existing user
-  "+573001112223", // New user
-  "+573004445556", // New user
-];
+1. **Add new users**: Add new rows to the CSV file
+2. **Modify existing users**: Edit the values in the CSV file
+3. **Disable users**: Change status to "inactive"
+4. **Remove users**: Delete rows from the CSV file
+
+**Example:**
+```csv
+phone_number,name,status
++573001234567,John Doe,active
++573009876543,Jane Smith,inactive
++573001112223,Bob Johnson,active
 ```
 
 ## Managing Transactions
@@ -123,7 +135,7 @@ To add or modify transactions, edit the `data/transactions.csv` file:
 2. **Modify existing transactions**: Edit the values in the CSV file
 3. **Remove transactions**: Delete rows from the CSV file
 
-The application will automatically read the updated CSV file and display the new transaction data.
+The application will automatically read the updated CSV files and display the new data.
 
 ## Production Considerations
 
@@ -140,8 +152,9 @@ The application will automatically read the updated CSV file and display the new
 ### Common Issues
 
 1. **"Access denied. This phone number is not authorized"**
-   - Add the phone number to the `ALLOWED_PHONE_NUMBERS` array
+   - Add the phone number to the `data/allowed-phones.csv` file
    - Ensure the phone number format is correct (+57XXXXXXXXX)
+   - Check that the status is set to "active"
 
 2. **"Invalid phone number format"**
    - Phone numbers must be in format: +57XXXXXXXXX
@@ -153,6 +166,11 @@ The application will automatically read the updated CSV file and display the new
 
 4. **"Failed to read transactions"**
    - Ensure the `data/transactions.csv` file exists
+   - Check that the CSV format is correct
+   - Verify file permissions
+
+5. **"Failed to read allowed phones"**
+   - Ensure the `data/allowed-phones.csv` file exists
    - Check that the CSV format is correct
    - Verify file permissions
 
