@@ -5,16 +5,11 @@ export async function POST(request: NextRequest) {
   try {
     const { phoneNumber } = await request.json();
 
-    // Validate phone number format (+57XXXXXXXXX)
-    if (
-      !phoneNumber ||
-      !phoneNumber.startsWith("+57") ||
-      phoneNumber.length !== 13
-    ) {
+    // Simple validation - just check if phone number is provided
+    if (!phoneNumber) {
       return NextResponse.json(
         {
-          error:
-            "Formato de número de teléfono inválido. Debe ser +57XXXXXXXXX",
+          error: "Número de teléfono es requerido",
         },
         { status: 400 }
       );
@@ -22,6 +17,7 @@ export async function POST(request: NextRequest) {
 
     // Check if phone number is in the allowed list
     const isAllowed = await isPhoneNumberAllowed(phoneNumber);
+
     if (!isAllowed) {
       return NextResponse.json(
         {

@@ -55,22 +55,9 @@ export default function LoginPage() {
     setSuccess("");
 
     try {
-      // Validate phone number format
-      let formattedPhone = phoneNumber;
-
-      // Remove any non-digit characters except +
-      const cleanNumber = phoneNumber.replace(/[^\d+]/g, "");
-
-      // If it doesn't start with +57, add it
-      if (!cleanNumber.startsWith("+57")) {
-        formattedPhone = `+57${cleanNumber}`;
-      } else {
-        formattedPhone = cleanNumber;
-      }
-
-      // Validate the final format
-      if (formattedPhone.length !== 13 || !formattedPhone.startsWith("+57")) {
-        setError("Formato inválido. Debe ser 10 dígitos (ej: 3101234567)");
+      // Simple validation - just check if phone number is provided
+      if (!phoneNumber.trim()) {
+        setError("Número de teléfono es requerido");
         setLoading(false);
         return;
       }
@@ -80,7 +67,7 @@ export default function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ phoneNumber: formattedPhone }),
+        body: JSON.stringify({ phoneNumber: phoneNumber.trim() }),
       });
 
       const data = await response.json();
@@ -107,24 +94,12 @@ export default function LoginPage() {
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    // Allow only numbers and + symbol
-    const cleanValue = value.replace(/[^\d+]/g, "");
-
-    // Limit to reasonable length (10 digits + optional +57)
-    if (cleanValue.length <= 13) {
-      setPhoneNumber(cleanValue);
-    }
+    setPhoneNumber(value);
   };
 
   // Validate if button should be enabled
   const isValidPhoneNumber = () => {
-    const cleanNumber = phoneNumber.replace(/[^\d+]/g, "");
-    if (cleanNumber.startsWith("+57")) {
-      return cleanNumber.length === 13;
-    } else {
-      return cleanNumber.length === 10;
-    }
+    return phoneNumber.trim().length > 0;
   };
 
   // Show loading while checking authentication
@@ -186,14 +161,14 @@ export default function LoginPage() {
                 id="phone"
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
-                placeholder="Ej: 3101234567"
+                placeholder="Ingresa tu número de teléfono"
                 className="w-full px-3 py-3 bg-zinc-800 border border-[#D4B886] rounded-lg focus:ring-2 focus:ring-[#D4B886] focus:border-[#D4B886] text-white placeholder-gray-400 text-sm md:px-4 md:py-4 md:text-base"
                 style={{ fontSize: "16px" }}
                 disabled={loading}
               />
             </div>
             <p className="text-xs text-gray-400 mt-1 md:text-sm">
-              Formato: 3101234567 o +573101234567
+              Ingresa cualquier formato de número de teléfono
             </p>
           </div>
 

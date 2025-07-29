@@ -7,6 +7,12 @@ interface AllowedPhone {
   status: string;
 }
 
+// Function to normalize phone number for comparison
+function normalizePhoneNumber(phoneNumber: string): string {
+  // Remove all non-digit characters and + symbol
+  return phoneNumber.replace(/[^\d+]/g, "");
+}
+
 // Function to check if a phone number is allowed
 export async function isPhoneNumberAllowed(
   phoneNumber: string
@@ -36,11 +42,14 @@ export async function isPhoneNumberAllowed(
       }
     }
 
+    // Normalize the input phone number
+    const normalizedInput = normalizePhoneNumber(phoneNumber);
+
     // Check if phone number exists and is active
-    return allowedPhones.some(
-      (phone: AllowedPhone) =>
-        phone.phone_number === phoneNumber && phone.status === "active"
-    );
+    return allowedPhones.some((phone: AllowedPhone) => {
+      const normalizedStored = normalizePhoneNumber(phone.phone_number);
+      return normalizedStored === normalizedInput && phone.status === "active";
+    });
   } catch (error) {
     console.error("Error checking allowed phones:", error);
     return false;
@@ -76,7 +85,7 @@ export async function getAllowedPhoneNumbers(): Promise<string[]> {
 
     return allowedPhones
       .filter((phone: AllowedPhone) => phone.status === "active")
-      .map((phone: AllowedPhone) => phone.phone_number);
+      .map((phone: AllowedPhone) => normalizePhoneNumber(phone.phone_number));
   } catch (error) {
     console.error("Error getting allowed phones:", error);
     return [];
