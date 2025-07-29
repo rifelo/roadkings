@@ -206,7 +206,7 @@ export default function Home() {
           </div>
 
           {/* Transaction History */}
-          <div className="bg-zinc-900 border border-[#D4B886] rounded-xl flex flex-col flex-1 min-h-0">
+          <div className="bg-zinc-900 border border-[#D4B886] rounded-xl flex flex-col flex-1 min-h-0 overflow-hidden">
             <div className="p-4 border-b border-[#D4B886] md:p-6 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 md:gap-3">
@@ -235,7 +235,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 overflow-y-auto">
               {filteredTransactions.length === 0 ? (
                 <div className="p-6 text-center">
                   <p className="text-gray-400 text-sm md:text-base">
@@ -249,7 +249,7 @@ export default function Home() {
                       key={transaction.id}
                       className="p-4 hover:bg-zinc-800/50 transition-colors md:p-6"
                     >
-                      <div className="flex justify-between items-start">
+                      <div className="flex justify-between items-start gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <svg
@@ -267,18 +267,18 @@ export default function Home() {
                               {transaction.date}
                             </span>
                           </div>
-                          <p className="text-white text-sm truncate md:text-base">
+                          <p className="text-white text-sm break-words md:text-base">
                             {transaction.description}
                           </p>
                         </div>
                         <div
-                          className={`ml-3 text-right ${
+                          className={`text-right flex-shrink-0 ${
                             transaction.type === "income"
                               ? "text-green-400"
                               : "text-red-400"
                           }`}
                         >
-                          <p className="text-sm font-medium md:text-base">
+                          <p className="text-sm font-medium md:text-base whitespace-nowrap">
                             {transaction.type === "income" ? "+" : "-"}$
                             {Math.abs(transaction.amount).toLocaleString(
                               "es-CO",
