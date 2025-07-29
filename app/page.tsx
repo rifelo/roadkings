@@ -8,60 +8,16 @@ interface Transaction {
   date: string;
   description: string;
   amount: number;
-  balance: number;
   type: "income" | "expense";
 }
 
 export default function Home() {
   const [userPhone, setUserPhone] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [activeFilter, setActiveFilter] = useState<
     "all" | "income" | "expenses"
   >("all");
-
-  // Sample transaction data
-  const [transactions] = useState<Transaction[]>([
-    {
-      id: "1",
-      date: "Jan 14, 2024",
-      description: "Monthly Dues - January",
-      amount: 2500.0,
-      balance: 2500.0,
-      type: "income",
-    },
-    {
-      id: "2",
-      date: "Jan 17, 2024",
-      description: "Bike Maintenance Fund",
-      amount: 800.0,
-      balance: 3300.0,
-      type: "income",
-    },
-    {
-      id: "3",
-      date: "Jan 21, 2024",
-      description: "Club Event - Charity Ride",
-      amount: 1200.0,
-      balance: 4500.0,
-      type: "income",
-    },
-    {
-      id: "4",
-      date: "Jan 24, 2024",
-      description: "Fuel for Group Ride",
-      amount: -150.0,
-      balance: 4350.0,
-      type: "expense",
-    },
-    {
-      id: "5",
-      date: "Jan 31, 2024",
-      description: "Club Merchandise Sales",
-      amount: 650.0,
-      balance: 5000.0,
-      type: "income",
-    },
-  ]);
 
   useEffect(() => {
     const sessionToken = localStorage.getItem("sessionToken");
@@ -84,6 +40,23 @@ export default function Home() {
     } else {
       setIsLoading(false);
     }
+  }, []);
+
+  // Fetch transactions from API
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await fetch("/api/transactions");
+        if (response.ok) {
+          const data = await response.json();
+          setTransactions(data.transactions);
+        }
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    fetchTransactions();
   }, []);
 
   const handleLogout = () => {
@@ -182,39 +155,7 @@ export default function Home() {
 
         <div className="p-6">
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* Total Collected */}
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-gray-400 text-sm font-medium">
-                    TOTAL COLLECTED
-                  </p>
-                  <p className="text-green-500 text-3xl font-bold">
-                    $
-                    {totalCollected.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}
-                  </p>
-                </div>
-                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
             {/* Current Balance */}
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
               <div className="flex justify-between items-start">
@@ -236,38 +177,6 @@ export default function Home() {
                     viewBox="0 0 20 20"
                   >
                     <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Total Expenses */}
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-gray-400 text-sm font-medium">
-                    TOTAL EXPENSES
-                  </p>
-                  <p className="text-red-500 text-3xl font-bold">
-                    $
-                    {totalExpenses.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}
-                  </p>
-                </div>
-                <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
-                    />
                   </svg>
                 </div>
               </div>
@@ -341,9 +250,6 @@ export default function Home() {
                     <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
                       AMOUNT
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
-                      BALANCE
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
@@ -382,12 +288,6 @@ export default function Home() {
                       >
                         {transaction.type === "income" ? "+" : "-"}$
                         {Math.abs(transaction.amount).toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td className="px-6 py-4 text-yellow-500 font-medium">
-                        $
-                        {transaction.balance.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                         })}
                       </td>
